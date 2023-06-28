@@ -1,8 +1,12 @@
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getContacts } from '../redux/selectors';
+import { addContact } from '../redux/contactsSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { customAlphabet } from 'nanoid';
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Container, Input, Label, Wrapper, ErrorMsg, Btn } from './ContactForm.styled';
 
 const nanoid = customAlphabet('1234567890', 3);
@@ -18,7 +22,11 @@ const initialValues = {
   number: '',
 };
 
-export const ContactForm = ({ onSubmit }) => {
+export const ContactForm = () => {
+
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+
   const handleSubmit = (values, { resetForm }) => {
     const newContact = {
       id: 'id-' + nanoid(),
@@ -26,7 +34,11 @@ export const ContactForm = ({ onSubmit }) => {
       number: values.number,
     };
 
-    onSubmit(newContact);
+     if (contacts.find(contact => contact.name === newContact.name)) {
+      return toast.error(`${newContact.name} is already in contacts`);
+    }
+
+    dispatch(addContact(newContact));
     resetForm();
   };
 
@@ -49,8 +61,7 @@ export const ContactForm = ({ onSubmit }) => {
           <Btn type="submit">Add contact</Btn>
         </Container>
       </Formik>
+      <ToastContainer />
     </>
   );
 };
-
-ContactForm.propTypes = { onSubmit: PropTypes.func.isRequired };
