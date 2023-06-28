@@ -3,6 +3,7 @@ import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 import { Title, Subtitle, Container } from './App.styled';
 
+
 export const App = () => {
   return (
     <Container>

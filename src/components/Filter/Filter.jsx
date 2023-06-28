@@ -7,6 +7,7 @@ export const Filter = () => {
   const dispatch = useDispatch();
   const filter = useSelector(getContactFilter);
 
+  
   return (
     <Wrapper>
       <Label htmlFor="filter">Find contacts by name</Label>
